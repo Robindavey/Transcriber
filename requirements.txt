@@ -1,0 +1,4 @@
+pytranslator
+vosk
+pydub
+wave
