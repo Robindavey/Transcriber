@@ -70,7 +70,7 @@ def convert_audio(input_file):
     return wav_file, chunk_paths
 
 
-def demoVosk(audioFile, output_path="Transcripts/transcription.txt"):
+def transcribe(audioFile, output_path="raw_text/raw_text.txt"):
     wav_file, chunks = convert_audio(audioFile)
 
     if wav_file is None or chunks is None:
@@ -125,7 +125,10 @@ def demoVosk(audioFile, output_path="Transcripts/transcription.txt"):
         f.write(output)
 
     print(f"Saved transcription to: {output_path}")
+    print("Making Trascription")
+    os.system("./process.sh")
+
 
 
 if __name__ == "__main__":
-    demoVosk("testAudio/testm4.mp4")
+    transcribe("testAudio/testm4.mp4")
