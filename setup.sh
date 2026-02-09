@@ -27,7 +27,8 @@ echo "Installing Python packages..."
 pip install \
     flask \
     werkzeug \
-    vosk
+    vosk \
+    piper-tts
 
 echo ""
 echo "========================================"
