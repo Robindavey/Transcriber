@@ -61,3 +61,35 @@ function downloadResult() {
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
 }
+// Add to script.js
+
+async function generateTTS() {
+    const status = document.getElementById("tts-status");
+    const downloadBtn = document.getElementById("downloadTTSBtn");
+    
+    status.innerText = "Generating audio... Please wait.";
+    downloadBtn.classList.add("hidden");
+    
+    try {
+        const response = await fetch("/generate-tts", {
+            method: "POST"
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+            status.innerText = "Error: " + data.error;
+            return;
+        }
+        
+        status.innerText = "Audio generated successfully!";
+        downloadBtn.classList.remove("hidden");
+        
+    } catch (err) {
+        status.innerText = "Failed: " + err;
+    }
+}
+
+function downloadTTS() {
+    window.location.href = "/download-tts";
+}
