@@ -1,0 +1,12 @@
+You are an expert note-taker.
+
+From the following cleaned transcript, create structured notes with:
+
+1. Main topics
+2. Key points
+3. Important details
+4. Decisions made
+5. Action items (if any)
+6. Questions raised (if any)
+
+Format the output clearly using headings and bullet points.
