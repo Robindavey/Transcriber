@@ -43,7 +43,39 @@ def upload():
         return jsonify({"result": result_text})
 
     return jsonify({"error": "Invalid file type"}), 400
+# Add this to your app.py
 
+from flask import send_file
+from tts_processor import text_to_speech
+
+@app.route("/generate-tts", methods=["POST"])
+def generate_tts():
+    """Generate TTS from the podcast script"""
+    script_path = "./podcastscripts/script.txt"
+    output_path = os.path.join(UPLOAD_FOLDER, "podcast_audio.wav")
+    
+    # Check if script file exists
+    if not os.path.exists(script_path):
+        return jsonify({"error": "Script file not found"}), 404
+    
+    # Generate TTS
+    success = text_to_speech(script_path, output_path)
+    
+    if success:
+        return jsonify({"success": True, "message": "Audio generated successfully"})
+    else:
+        return jsonify({"error": "TTS generation failed"}), 500
+
+
+@app.route("/download-tts", methods=["GET"])
+def download_tts():
+    """Download the generated TTS audio file"""
+    output_path = os.path.join(UPLOAD_FOLDER, "podcast_audio.wav")
+    
+    if not os.path.exists(output_path):
+        return jsonify({"error": "Audio file not found"}), 404
+    
+    return send_file(output_path, as_attachment=True, download_name="podcast_audio.wav")
 
 if __name__ == "__main__":
     app.run(debug=True)

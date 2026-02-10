@@ -27,6 +27,16 @@
 
         <pre id="output"></pre>
     </div>
+    <!-- Add this inside your .container div in index.html -->
+
+    <div class="tts-section">
+        <h2>Generate Podcast Audio</h2>
+        <button onclick="generateTTS()">Generate TTS from Script</button>
+        <div id="tts-status"></div>
+        <button id="downloadTTSBtn" class="hidden" onclick="downloadTTS()">
+            Download Podcast Audio
+        </button>
+    </div>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
