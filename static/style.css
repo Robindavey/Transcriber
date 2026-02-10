@@ -14,6 +14,88 @@ body {
     text-align: center;
 }
 
+/* Back link */
+a {
+    color: #60a5fa;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Download project button */
+.download-project-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
+}
+
+.download-project-btn:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    box-shadow: 0 6px 12px rgba(37, 99, 235, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Projects list */
+.projects-list {
+    margin-top: 40px;
+}
+
+.projects-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.projects-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1e293b;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.projects-list li:hover {
+    background: #334155;
+}
+
+.projects-list a {
+    color: #60a5fa;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.projects-list a:hover {
+    text-decoration: underline;
+}
+
+.delete-btn {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.delete-btn:hover {
+    background: #b91c1c;
+}
+
 /* Title */
 h1 {
     margin-bottom: 28px;
@@ -128,4 +210,94 @@ button:hover {
 }
 .hidden {
     display: none !important;
+}
+
+/* Upload box drag and drop */
+.upload-box.dragover {
+    border: 2px dashed #60a5fa;
+    background-color: rgba(96, 165, 250, 0.1);
+}
+
+/* Process section */
+.process-section {
+    margin-bottom: 24px;
+}
+
+.process-section button {
+    padding: 12px 24px;
+    background-color: #10b981;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.process-section button:hover {
+    background-color: #059669;
+}
+
+/* Files section */
+.files-section {
+    margin-top: 40px;
+    text-align: left;
+}
+
+.files-section h2 {
+    text-align: center;
+}
+
+.files-section details {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.files-section summary {
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px;
+    background: #1e293b;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.files-section ul {
+    list-style: none;
+    padding: 0;
+    margin-left: 20px;
+}
+
+.files-section li {
+    background: #334155;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete-file-btn {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+.delete-file-btn:hover {
+    background: #b91c1c;
+}
+
+.files-section a {
+    color: #60a5fa;
+    text-decoration: none;
+}
+
+.files-section a:hover {
+    text-decoration: underline;
 }

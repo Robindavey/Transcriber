@@ -1,0 +1,148 @@
+Introduction to Assembly Language
+CS 201: Computer Architecture
+Lecture 8 - Assembly Language Fundamentals
+
+Professor Martinez: Alright everyone, welcome back! Today we're diving into assembly language, which I know some of you have been both looking forward to and dreading. I get it—assembly has this reputation for being difficult, but honestly, once you understand what's happening, it's actually quite elegant. It's like looking under the hood of a car for the first time.
+So, let me start with the fundamental question: what is assembly language, and why should you care?
+Assembly language is a low-level programming language that's specific to a particular computer architecture. Unlike high-level languages like Python or Java, where you write x = x + 1 and the language handles all the details, in assembly you're directly telling the processor what to do, step by step.
+Now, why does this matter? Well, several reasons. First, understanding assembly helps you understand how computers actually work at the hardware level. Second, sometimes you need that level of control for performance-critical code, device drivers, or embedded systems. And third—and this is important for many of you going into security or systems programming—you need to understand assembly to analyze malware, find vulnerabilities, or do reverse engineering.
+[Professor writes on the board]:
+High-Level Code (C):
+int result = a + b;
+
+Assembly Code (x86):
+mov eax, [a]
+add eax, [b]
+mov [result], eax
+See how one line of C becomes three assembly instructions? Let's break this down.
+In the first line, mov eax, [a], we're moving the value at memory location a into a register called eax. Registers are like temporary storage locations built directly into the CPU—they're incredibly fast. Think of them as the CPU's scratchpad.
+The second line, add eax, [b], adds the value at memory location b to whatever's already in eax. Now eax contains the sum.
+The third line stores that sum back into memory at location result.
+Student: Professor, why can't we just add a and b directly in memory?
+Professor Martinez: Excellent question! This gets at one of the fundamental constraints of most CPU architectures. Most processors can't operate directly on two memory locations at once. You typically need to load at least one operand into a register first. This is part of what's called the "load-store architecture" in many modern processors.
+Now, let me introduce you to the registers in x86 architecture, which is what most of your laptops are running.
+[Draws on board]:
+General Purpose Registers (32-bit):
+- EAX (Accumulator)
+- EBX (Base)
+- ECX (Counter)
+- EDX (Data)
+- ESI (Source Index)
+- EDI (Destination Index)
+- EBP (Base Pointer)
+- ESP (Stack Pointer)
+Historically, these registers had specific purposes—that's why they have these names. EAX was the accumulator for arithmetic operations, ECX was used for loop counters, and so on. In modern programming, you can use most of these interchangeably, but some still have special roles. For instance, ESP always points to the top of the stack, and you really don't want to mess with that unless you know exactly what you're doing.
+Let me show you a more complete example. Let's write a simple function that adds two numbers.
+[Types on projected screen]:
+assembly; Function: add_numbers
+; Purpose: Adds two integers
+; Parameters: First number in EAX, second in EBX
+; Returns: Result in EAX
+
+add_numbers:
+    add eax, ebx    ; Add EBX to EAX
+    ret             ; Return to caller
+The semicolons indicate comments—the processor ignores everything after them. The add instruction here adds ebx to eax and stores the result back in eax. The ret instruction returns control to whoever called this function.
+Student: What about the 64-bit registers? My computer is 64-bit.
+Professor Martinez: Great point! In 64-bit mode, these registers are extended. EAX becomes RAX, EBX becomes RBX, and so on. The R stands for "register" in the AMD64 naming convention. You also get additional registers R8 through R15. But for learning purposes, we'll stick with 32-bit examples since the concepts are identical and the notation is a bit simpler.
+Now, let's talk about memory addressing modes, because this is where assembly gets really interesting. There are several ways to specify where data comes from or goes to.
+[Writes on board]:
+assemblymov eax, 5          ; Immediate: EAX = 5
+mov eax, ebx        ; Register: EAX = EBX
+mov eax, [1000]     ; Direct: EAX = value at address 1000
+mov eax, [ebx]      ; Indirect: EAX = value at address in EBX
+mov eax, [ebx + 4]  ; Indexed: EAX = value at (EBX + 4)
+The square brackets are crucial—they mean "the value at this address" rather than the address itself. It's the difference between the house number and what's inside the house.
+Let me give you a practical example. Say you're iterating through an array:
+assemblymov ecx, 0          ; Counter = 0
+mov ebx, array      ; EBX points to start of array
+
+loop_start:
+    mov eax, [ebx + ecx*4]  ; Load array[ecx]
+    ; ... do something with eax ...
+    inc ecx                  ; Increment counter
+    cmp ecx, 10             ; Compare with array length
+    jl loop_start           ; Jump if less than
+The ecx*4 part is because each integer is 4 bytes, so to get to the next element, we need to move 4 bytes forward in memory.
+Student: What's that jl instruction?
+Professor Martinez: Ah, we've hit control flow! The jl means "jump if less than." Assembly doesn't have nice while loops or if statements—instead, you have conditional and unconditional jumps. The cmp instruction compares two values and sets special flags in the processor, and then the jump instruction checks those flags.
+Let me show you how a simple if-statement translates:
+[Types on screen]:
+assembly; C code: if (x > 5) { y = 10; }
+
+    mov eax, [x]
+    cmp eax, 5      ; Compare x with 5
+    jle else_part   ; Jump if x <= 5
+    mov [y], 10     ; This runs if x > 5
+else_part:
+    ; Continue...
+```
+
+The `jle` means "jump if less than or equal." If the condition is false, we skip over the `mov [y], 10` instruction.
+
+Now, one of the most important concepts in assembly is the stack. The stack is a region of memory that grows downward—yes, downward, which trips people up—and it's used for function calls, local variables, and saving register values.
+
+**[Draws a diagram]:**
+```
+High Memory
+    |
+    v
+[Stack grows down]
+ESP -> [Top of stack]
+    |
+    v
+Low Memory
+The push instruction puts a value on the stack and decrements the stack pointer. The pop instruction removes a value and increments the stack pointer.
+assemblypush eax        ; Save EAX on stack
+push ebx        ; Save EBX on stack
+; ... do some work ...
+pop ebx         ; Restore EBX
+pop eax         ; Restore EAX
+Notice we pop in reverse order—that's because the stack is Last In, First Out, like a stack of plates.
+Let me show you a complete function with a proper stack frame:
+assemblymy_function:
+    push ebp            ; Save old base pointer
+    mov ebp, esp        ; Set up new base pointer
+    sub esp, 16         ; Allocate 16 bytes for local variables
+    
+    ; Function body here
+    ; Local variables accessed as [ebp-4], [ebp-8], etc.
+    
+    mov esp, ebp        ; Restore stack pointer
+    pop ebp             ; Restore base pointer
+    ret                 ; Return
+This is the standard function prologue and epilogue. The base pointer ebp gives us a stable reference point for accessing parameters and local variables, even as we push and pop things on the stack.
+Student: This seems really tedious compared to just writing in C.
+Professor Martinez: You're absolutely right! And that's exactly why we have compilers. Writing large programs in assembly is tedious and error-prone. But here's the thing: understanding assembly makes you a better programmer in any language. You understand what's expensive, what's cheap, why certain optimizations work, and how security vulnerabilities happen.
+For instance, have you heard of buffer overflow attacks? They exploit the fact that if you write past the end of an array on the stack, you can overwrite the return address and hijack program execution. You can't really understand how that works without understanding assembly and the stack.
+Let me leave you with one more example that brings it all together—a simple function to calculate the factorial of a number:
+assembly; factorial(n) returns n!
+; Parameter: n in EAX
+; Returns: result in EAX
+
+factorial:
+    push ebp
+    mov ebp, esp
+    push ebx            ; We'll use EBX, so save it
+    
+    cmp eax, 1          ; if (n <= 1)
+    jle base_case
+    
+    mov ebx, eax        ; Save n
+    dec eax             ; n - 1
+    call factorial      ; Recursive call
+    imul eax, ebx       ; n * factorial(n-1)
+    jmp done
+    
+base_case:
+    mov eax, 1          ; Return 1
+    
+done:
+    pop ebx
+    pop ebp
+    ret
+This has everything: function calls, recursion, arithmetic, conditionals, the stack. And yes, it's way more code than the equivalent C function, but you can see exactly what the computer is doing.
+Alright, for Thursday, I want you to read chapter 6 on x86 instruction set architecture, and try the assembly problems in the homework. We'll be doing some hands-on debugging with GDB, so make sure you have that installed. Any questions before we wrap up?
+Student: Do we need to memorize all the instructions?
+Professor Martinez: No, definitely not. You'll have reference materials for the exam. What I want you to understand are the concepts: registers, memory addressing, the stack, and control flow. The specific syntax you can always look up. Focus on understanding what's happening at each step.
+Alright everyone, see you Thursday!

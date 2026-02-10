@@ -2,9 +2,10 @@
 testAudio/
 models/
 chunks/
-venv/
+*venv/
 Transcripts/
 output/
 GoodFiles/
 uploads/
 _pycache_/
+data/

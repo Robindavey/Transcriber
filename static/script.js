@@ -1,34 +1,39 @@
 let latestResult = "";
+let fileRefreshInterval = null;
+
+function startLiveFileUpdates() {
+    // Refresh file list every 2 seconds
+    if (fileRefreshInterval) clearInterval(fileRefreshInterval);
+    fileRefreshInterval = setInterval(loadFiles, 2000);
+}
 
 async function uploadFile() {
     const fileInput = document.getElementById("audioFile");
     const status = document.getElementById("status");
     const spinner = document.getElementById("spinner");
     const output = document.getElementById("output");
-
     const downloadBtn = document.getElementById("downloadBtn");
 
     if (fileInput.files.length === 0) {
-        alert("Please select an audio file");
+        alert("Please select a file");
         return;
     }
 
     const formData = new FormData();
     formData.append("file", fileInput.files[0]);
 
-    status.innerText = "Processing audio... This can take a few minutes.";
+    status.innerText = "Processing file... This can take a few minutes.";
     spinner.classList.remove("hidden");
     output.innerText = "";
     downloadBtn.classList.add("hidden");
 
     try {
-        const response = await fetch("/upload", {
+        const response = await fetch(`/upload/${project}`, {
             method: "POST",
             body: formData,
         });
 
         const data = await response.json();
-
         spinner.classList.add("hidden");
 
         if (data.error) {
@@ -36,11 +41,19 @@ async function uploadFile() {
             return;
         }
 
-        status.innerText = "Done!";
-        latestResult = data.result;
-        output.innerText = latestResult;
-        downloadBtn.classList.remove("hidden");
-
+        if (data.type === "audio") {
+            status.innerText = "Done! Audio transcribed.";
+            latestResult = data.result;
+            output.innerText = latestResult;
+            downloadBtn.classList.remove("hidden");
+        } else if (data.type === "text") {
+            status.innerText = "Done! Text file copied to raw text.";
+            latestResult = data.result;
+        } else if (data.type === "unsupported") {
+            status.innerText = "✓ " + data.message;
+        }
+        
+        loadFiles(); // Refresh file list
     } catch (err) {
         spinner.classList.add("hidden");
         status.innerText = "Failed: " + err;
@@ -48,14 +61,28 @@ async function uploadFile() {
 }
 
 function downloadResult() {
-    if (!latestResult) return;
+    // First try to get processed notes, else use transcription
+    fetch(`/project/${project}/notes`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.notes) {
+                downloadText(data.notes, "fullNotes.txt");
+            } else {
+                downloadText(latestResult, "transcription.txt");
+            }
+        })
+        .catch(() => {
+            downloadText(latestResult, "transcription.txt");
+        });
+}
 
-    const blob = new Blob([latestResult], { type: "text/plain" });
+function downloadText(content, filename) {
+    const blob = new Blob([content], { type: "text/plain" });
     const url = window.URL.createObjectURL(blob);
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "notes.txt";  // user will choose location
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
 
@@ -66,17 +93,20 @@ function downloadResult() {
 
 async function generateTTS() {
     const status = document.getElementById("tts-status");
+    const spinner = document.getElementById("tts-spinner");
     const downloadBtn = document.getElementById("downloadTTSBtn");
     
     status.innerText = "Generating audio... Please wait.";
+    spinner.classList.remove("hidden");
     downloadBtn.classList.add("hidden");
     
     try {
-        const response = await fetch("/generate-tts", {
+        const response = await fetch(`/generate-tts/${project}`, {
             method: "POST"
         });
         
         const data = await response.json();
+        spinner.classList.add("hidden");
         
         if (data.error) {
             status.innerText = "Error: " + data.error;
@@ -85,12 +115,13 @@ async function generateTTS() {
         
         status.innerText = "Audio generated successfully!";
         downloadBtn.classList.remove("hidden");
-        
+        loadFiles(); // Refresh file list
     } catch (err) {
+        spinner.classList.add("hidden");
         status.innerText = "Failed: " + err;
     }
 }
 
 function downloadTTS() {
-    window.location.href = "/download-tts";
+    window.location.href = `/download-tts/${project}`;
 }

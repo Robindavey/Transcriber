@@ -3,17 +3,26 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Audio → Notes</title>
+    <title>Audio → Notes - {{ project }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Audio → Structured Notes</h1>
+        <a href="/">← Back to Projects</a>
+        <h1>Audio → Structured Notes - Project: {{ project }}</h1>
 
-        <div class="upload-box">
-            <label for="audioFile" class="file-label">Browse Audio File</label>
-            <input type="file" id="audioFile" accept="audio/*" />
+        <button class="download-project-btn" onclick="downloadProject()">Download Project</button>
+
+        <div class="upload-box" id="uploadBox">
+            <label for="audioFile" class="file-label">Browse File or Drag & Drop</label>
+            <input type="file" id="audioFile" />
             <button onclick="uploadFile()">Upload & Process</button>
+        </div>
+
+        <div class="process-section">
+            <button onclick="processToNotes()">Process to Notes</button>
+            <div id="process-status"></div>
+            <div id="process-spinner" class="spinner hidden"></div>
         </div>  
 
 
@@ -28,18 +37,127 @@
         </button>
 
         <pre id="output"></pre>
-    </div>
-    <!-- Add this inside your .container div in index.html -->
 
-    <div class="tts-section">
-        <h2>Generate Podcast Audio</h2>
-        <button onclick="generateTTS()">Generate TTS from Script</button>
-        <div id="tts-status"></div>
-        <button id="downloadTTSBtn" class="hidden" onclick="downloadTTS()">
-            Download Podcast Audio
-        </button>
+        <div class="tts-section">
+            <h2>Generate Podcast Audio</h2>
+            <button onclick="generateTTS()">Generate TTS from Script</button>
+            <div id="tts-status"></div>
+            <div id="tts-spinner" class="spinner hidden"></div>
+            <button id="downloadTTSBtn" class="hidden" onclick="downloadTTS()">
+                Download Podcast Audio
+            </button>
+        </div>
+
+        <div class="files-section">
+            <h2>Project Files</h2>
+            <div id="files-container">
+                <!-- File lists will be loaded here -->
+            </div>
+        </div>
     </div>
 
+    <script>
+        const project = "{{ project }}";
+
+        window.onload = loadFiles;
+
+        function loadFiles() {
+            const folders = ["uploads", "raw", "audio", "notes", "scripts", "transcripts"];
+            const container = document.getElementById("files-container");
+            container.innerHTML = "";
+            
+            folders.forEach(folder => {
+                fetch(`/project/${project}/files/${folder}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const details = document.createElement("details");
+                        const summary = document.createElement("summary");
+                        summary.textContent = folder;
+                        details.appendChild(summary);
+                        
+                        if (data.files.length === 0) {
+                            const p = document.createElement("p");
+                            p.textContent = "No files";
+                            details.appendChild(p);
+                        } else {
+                            const ul = document.createElement("ul");
+                            data.files.forEach(file => {
+                                const li = document.createElement("li");
+                                li.innerHTML = `${file.name} (${(file.size / 1024).toFixed(2)} KB) <a href="/project/${project}/download/${folder}/${file.name}" download>Download</a> <button class="delete-file-btn" onclick="deleteFile('${folder}', '${file.name}')">Delete</button>`;
+                                ul.appendChild(li);
+                            });
+                            details.appendChild(ul);
+                        }
+                        container.appendChild(details);
+                    });
+            });
+        }
+
+        function processToNotes() {
+            const status = document.getElementById("process-status");
+            const spinner = document.getElementById("process-spinner");
+            status.innerText = "Processing to notes... This may take a few minutes.";
+            spinner.classList.remove("hidden");
+            
+            fetch(`/process/${project}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    spinner.classList.add("hidden");
+                    if (data.success) {
+                        status.innerText = "Processing completed!";
+                        loadFiles(); // Refresh file list
+                    } else {
+                        status.innerText = "Error: " + data.error;
+                    }
+                })
+                .catch(err => {
+                    spinner.classList.add("hidden");
+                    status.innerText = "Failed: " + err;
+                });
+        }
+
+        // Drag and drop functionality
+        const uploadBox = document.getElementById('uploadBox');
+        const fileInput = document.getElementById('audioFile');
+
+        uploadBox.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadBox.classList.add('dragover');
+        });
+
+        uploadBox.addEventListener('dragleave', () => {
+            uploadBox.classList.remove('dragover');
+        });
+
+        uploadBox.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadBox.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+            }
+        });
+
+        function deleteFile(folder, filename) {
+            if (confirm(`Are you sure you want to delete "${filename}"?`)) {
+                fetch(`/delete_file/${project}/${folder}/${filename}`, { method: 'DELETE' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            loadFiles();
+                        } else {
+                            alert('Error: ' + data.error);
+                        }
+                    });
+            }
+        }
+
+        function downloadProject() {
+            window.location.href = `/download-project/${project}`;
+        }
+
+        // ... existing script functions, modified for project
+    </script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

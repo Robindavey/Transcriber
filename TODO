@@ -1,0 +1,16 @@
+Allow for more file types
+    .docx
+    .pdf
+    .txt
+    .mp4
+    .jpg
+    ...
+then we will write parsers for each in the future. but for now eevrtthing goes to the uploads folder
+we then have a check for file type and the audios goe through the current system
+
+.txt can we copied straight to raw 
+and the rest for now make pop up unsupported file type check again later
+
+
+
+and the last thing is to do is make the files fill in live not have to reload and selcto a button
