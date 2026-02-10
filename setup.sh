@@ -29,7 +29,11 @@ pip install \
     werkzeug \
     vosk \
     piper-tts
-
+echo "Python packages installed."
+echo "Installing Ollama..."
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull llama2:7b
+echo "Ollama installed and model pulled."
 echo ""
 echo "========================================"
 echo "Setup complete."
