@@ -3,7 +3,7 @@
 set -e
 
 echo "Updating system packages..."
-sudo apt update
+#sudo apt update
 
 echo "Installing system dependencies..."
 sudo apt install -y \

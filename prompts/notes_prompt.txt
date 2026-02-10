@@ -1,3 +1,4 @@
+You are a precise transcription engine. Temperature: 0.
 You are an expert note-taker.
 
 From the following cleaned transcript, create structured notes with:

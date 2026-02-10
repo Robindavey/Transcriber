@@ -4,3 +4,7 @@ models/
 chunks/
 venv/
 Transcripts/
+output/
+GoodFiles/
+uploads/
+_pycache_/

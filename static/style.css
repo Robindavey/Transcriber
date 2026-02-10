@@ -4,69 +4,128 @@ body {
     color: #e2e8f0;
     display: flex;
     justify-content: center;
-    padding: 40px;
+    padding: 24px;
+    margin: 0;
 }
 
 .container {
     width: 800px;
-    max-width: 95%;
-}
-
-h1 {
+    max-width: 100%;
     text-align: center;
-    margin-bottom: 30px;
 }
 
+/* Title */
+h1 {
+    margin-bottom: 28px;
+    font-size: 28px;
+}
+
+/* Upload box layout */
 .upload-box {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
 }
 
-button {
-    padding: 10px 20px;
-    border: none;
-    background: #3b82f6;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #2563eb;
-}
-
-.hidden {
+/* Hide real file input */
+input[type="file"] {
     display: none;
 }
 
+/* Main buttons */
+button,
+.file-label {
+    padding: 16px 28px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 220px;
+}
+
+/* Browse button (primary) */
+.file-label {
+    background: #3b82f6;
+    color: white;
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+}
+
+.file-label:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(59, 130, 246, 0.35);
+}
+
+/* Secondary buttons */
+button {
+    background: #1e293b;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+}
+
+button:hover {
+    background: #334155;
+    transform: translateY(-2px);
+}
+
+/* Status */
 #status {
-    margin: 15px 0;
+    margin: 18px 0;
     font-style: italic;
+    opacity: 0.9;
 }
 
 /* Spinner */
 .spinner {
-    margin: 20px auto;
-    width: 50px;
-    height: 50px;
+    margin: 24px auto;
+    width: 60px;
+    height: 60px;
     border: 6px solid #334155;
     border-top: 6px solid #3b82f6;
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
 
+/* Output */
+#output {
+    white-space: pre-wrap;
+    background: #1e293b;
+    padding: 18px;
+    border-radius: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 24px;
+    text-align: left;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 22px;
+    }
+
+    button,
+    .file-label {
+        width: 100%;
+        min-width: unset;
+        font-size: 15px;
+        padding: 14px 20px;
+    }
+
+    .container {
+        padding: 0 10px;
+    }
+}
+
+/* Spinner animation */
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-
-#output {
-    white-space: pre-wrap;
-    background: #1e293b;
-    padding: 15px;
-    border-radius: 6px;
-    max-height: 400px;
-    overflow-y: auto;
-    margin-top: 20px;
+.hidden {
+    display: none !important;
 }

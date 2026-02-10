@@ -5,6 +5,7 @@ async function uploadFile() {
     const status = document.getElementById("status");
     const spinner = document.getElementById("spinner");
     const output = document.getElementById("output");
+
     const downloadBtn = document.getElementById("downloadBtn");
 
     if (fileInput.files.length === 0) {

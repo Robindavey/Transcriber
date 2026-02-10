@@ -2,7 +2,9 @@
 import subprocess
 import os
 
-def text_to_speech(text_file_path, output_wav_path):
+def text_to_speech(text_file_path, output_wav_path, newFile=False):
+    if newFile:
+        os.system("./podcast-builder.sh")
     """
     Convert text file to speech using Piper TTS
     
@@ -19,11 +21,11 @@ def text_to_speech(text_file_path, output_wav_path):
             text_content = f.read()
         
         # Path to your Piper voice model
-        model_path = os.path.expanduser('~/piper-voices/en_US-lessac-medium.onnx')
+        model_path = os.path.expanduser('~/Desktop/Programs/Transcriber/piper-voices/en_US-lessac-medium.onnx')
         
-        # Run Piper TTS
+        # Run Piper TTS (note: --output-file with hyphen, not underscore)
         process = subprocess.Popen(
-            ['piper', '--model', model_path, '--output_file', output_wav_path],
+            ['piper', '--model', model_path, '--output-file', output_wav_path],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
@@ -41,3 +43,11 @@ def text_to_speech(text_file_path, output_wav_path):
     except Exception as e:
         print(f"Exception: {str(e)}")
         return False
+if __name__ == "__main__":
+    text_file = "podcastscripts/script.txt"
+    output_wav = "output/audio.wav"
+    success = text_to_speech(text_file, output_wav)
+    if success:
+        print("Text-to-speech conversion successful.")
+    else:
+        print("Text-to-speech conversion failed.")
