@@ -6,3 +6,6 @@ pymupdf
 pytesseract
 Pillow
 pathvalidate
+python-docx
+openpyxl
+pandas

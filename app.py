@@ -5,6 +5,9 @@ from werkzeug.utils import secure_filename
 from src.transcription import transcribe
 from src.pdf_tool import pdf_to_text
 from src.image_tool import image_to_text
+from src.docx_tool import docx_to_text
+from src.xlsx_tool import xlsx_to_text
+from src.csv_tool import csv_to_text
 PROJECTS_FOLDER = "data/projects"
 AUDIO_EXTENSIONS = {"mp3", "wav", "flac", "mp4", "m4a", "aac"}
 TEXT_EXTENSIONS = {"txt"}
@@ -49,8 +52,8 @@ def process_text(project_path):
     import os
     
     raw_text_path = os.path.join(project_path, "raw", "raw_text.txt")
-    full_notes_path = os.path.join(project_path, "notes", "fullNotes.txt")
-    short_notes_path = os.path.join(project_path, "notes", "ShortendNotes.txt")
+    full_notes_path = os.path.join(project_path, "notes", "fullNotes.md")
+    short_notes_path = os.path.join(project_path, "notes", "ShortendNotes.md")
     
     # Read source type
     source_type_path = os.path.join(project_path, "source_type.txt")
@@ -207,6 +210,36 @@ def upload(project_name):
             return jsonify({"result": result_text, "type": "image"})
         except Exception as e:
             return jsonify({"error": f"Error processing image: {str(e)}"})
+    elif filename.lower().endswith('.docx'):
+        try:
+            raw_text_path = os.path.join(project_path, "raw", "raw_text.txt")
+            result_text = docx_to_text(filepath, raw_text_path)
+            # Store source type
+            with open(os.path.join(project_path, "source_type.txt"), "w") as f:
+                f.write("docx")
+            return jsonify({"result": result_text, "type": "document"})
+        except Exception as e:
+            return jsonify({"error": f"Error processing document: {str(e)}"})
+    elif filename.lower().endswith('.xlsx'):
+        try:
+            raw_text_path = os.path.join(project_path, "raw", "raw_text.txt")
+            result_text = xlsx_to_text(filepath, raw_text_path)
+            # Store source type
+            with open(os.path.join(project_path, "source_type.txt"), "w") as f:
+                f.write("xlsx")
+            return jsonify({"result": result_text, "type": "spreadsheet"})
+        except Exception as e:
+            return jsonify({"error": f"Error processing spreadsheet: {str(e)}"})
+    elif filename.lower().endswith('.csv'):
+        try:
+            raw_text_path = os.path.join(project_path, "raw", "raw_text.txt")
+            result_text = csv_to_text(filepath, raw_text_path)
+            # Store source type
+            with open(os.path.join(project_path, "source_type.txt"), "w") as f:
+                f.write("csv")
+            return jsonify({"result": result_text, "type": "csv"})
+        except Exception as e:
+            return jsonify({"error": f"Error processing CSV: {str(e)}"})
     else:
         # Other file types - store in uploads but don't process
         return jsonify({"message": f"File '{filename}' uploaded successfully to project. Parsers for this file type will be available soon.", "type": "unsupported"})
