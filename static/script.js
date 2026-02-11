@@ -123,5 +123,24 @@ async function generateTTS() {
 }
 
 function downloadTTS() {
-    window.location.href = `/download-tts/${project}`;
+    fetch(`/download-tts/${project}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Download failed');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'podcast_audio.wav';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(err => {
+            alert('Download failed: ' + err.message);
+        });
 }
