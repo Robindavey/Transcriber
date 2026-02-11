@@ -2,3 +2,8 @@ pytranslator
 vosk
 pydub
 wave
+flask 
+werkzeug 
+vosk 
+piper-tts
+pymupdf
