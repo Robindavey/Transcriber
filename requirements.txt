@@ -3,3 +3,6 @@ werkzeug
 vosk 
 piper-tts
 pymupdf
+pytesseract
+Pillow
+pathvalidate

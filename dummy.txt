@@ -1,0 +1,21 @@
+= Back to Projects
+
+Audio > Structured Notes - Project: testPDF
+
+Upload & Process
+
+Done! Text file copied to raw text.
+
+Generate Podcast Audio
+
+Generate TTS from Script
+
+Generating audio... Please wait.
+
+=~“
+
+Project Files
+
+> uploads
+
+» audio

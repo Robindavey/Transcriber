@@ -1,6 +1,7 @@
 # tts_processor.py
 import subprocess
 import os
+import tempfile
 
 def text_to_speech(text_file_path, output_wav_path, file_type="text"):
     """
@@ -16,8 +17,6 @@ def text_to_speech(text_file_path, output_wav_path, file_type="text"):
     # Check if script exists, if not, generate it
     if not os.path.exists(text_file_path):
         print("Making podcast script...")
-        import subprocess
-        import tempfile
         # Extract project path: text_file_path is project/scripts/script.txt
         project_path = os.path.dirname(os.path.dirname(text_file_path))
         raw_text_path = os.path.join(project_path, "raw", "raw_text.txt")
@@ -50,11 +49,14 @@ def text_to_speech(text_file_path, output_wav_path, file_type="text"):
             text_content = f.read()
         
         # Path to your Piper voice model
-        model_path = os.path.expanduser('~/Desktop/Programs/Transcriber/data/piper-voices/en_US-lessac-medium.onnx')
+        model_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'piper-voices', 'en_US-lessac-medium.onnx')
+        
+        # Path to piper executable in venv
+        piper_path = os.path.join(os.path.dirname(__file__), '..', '.venv', 'bin', 'piper')
         
         # Run Piper TTS (note: --output-file with hyphen, not underscore)
         process = subprocess.Popen(
-            ['piper', '--model', model_path, '--output-file', output_wav_path],
+            [piper_path, '--model', model_path, '--output-file', output_wav_path],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE

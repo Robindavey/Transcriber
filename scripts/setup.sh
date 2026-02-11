@@ -12,7 +12,8 @@ sudo apt install -y \
     python3-pip \
     ffmpeg \
     build-essential \
-    libsndfile1
+    libsndfile1 \
+    tesseract-ocr
 
 echo "Creating virtual environment..."
 python3 -m venv venv
