@@ -9,3 +9,4 @@ pathvalidate
 python-docx
 openpyxl
 pandas
+tkinter

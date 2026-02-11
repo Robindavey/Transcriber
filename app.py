@@ -1,4 +1,6 @@
 import os
+import tkinter as tk
+from tkinter import simpledialog, messagebox
 from flask import Flask, render_template, request, jsonify, send_file, session
 from werkzeug.utils import secure_filename
 
@@ -8,6 +10,43 @@ from src.image_tool import image_to_text
 from src.docx_tool import docx_to_text
 from src.xlsx_tool import xlsx_to_text
 from src.csv_tool import csv_to_text
+
+def setup_secret_key():
+    """Setup secret key on first run using Tkinter dialog"""
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+
+    # Show info message
+    messagebox.showinfo("Transcriber Setup",
+                       "Welcome to Transcriber!\n\n"
+                       "This appears to be your first time running the application.\n"
+                       "Please enter a secret key for secure sessions.\n\n"
+                       "You can generate a secure key or use any random string.")
+
+    # Ask for secret key
+    secret_key = simpledialog.askstring("Secret Key Setup",
+                                       "Enter your secret key:",
+                                       parent=root)
+
+    if secret_key and secret_key.strip():
+        # Ensure data directory exists
+        os.makedirs("data", exist_ok=True)
+
+        # Save to secrets.txt
+        with open(os.path.join("data", "secrets.txt"), "w") as f:
+            f.write(secret_key.strip())
+
+        messagebox.showinfo("Setup Complete",
+                           "Secret key has been saved successfully!\n\n"
+                           "The application will now start.")
+        root.destroy()
+        return secret_key.strip()
+    else:
+        messagebox.showerror("Error",
+                            "Secret key is required to run the application.")
+        root.destroy()
+        exit(1)
+
 PROJECTS_FOLDER = "data/projects"
 AUDIO_EXTENSIONS = {"mp3", "wav", "flac", "mp4", "m4a", "aac"}
 TEXT_EXTENSIONS = {"txt"}
@@ -16,7 +55,16 @@ DOCUMENT_EXTENSIONS = {"docx", "doc", "xlsx", "csv"}
 ALL_EXTENSIONS = AUDIO_EXTENSIONS | TEXT_EXTENSIONS | IMAGE_EXTENSIONS | DOCUMENT_EXTENSIONS
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "your_secret_key"  # For session, if needed
+
+# Check for secret key
+secrets_path = os.path.join("data", "secrets.txt")
+if not os.path.exists(secrets_path):
+    secret_key = setup_secret_key()
+else:
+    with open(secrets_path, "r") as f:
+        secret_key = f.read().strip()
+
+app.config["SECRET_KEY"] = secret_key
 
 os.makedirs(PROJECTS_FOLDER, exist_ok=True)
 
