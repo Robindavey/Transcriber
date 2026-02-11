@@ -48,7 +48,8 @@ def process_text(project_path):
     short_notes_path = os.path.join(project_path, "notes", "ShortendNotes.txt")
     
     # Reconstruction
-    with open("prompts/text/reconstruction_prompt.txt", "r") as f:
+    file_type = get_file_extension(raw_text_path)
+    with open(f"prompts/{file_type}/reconstruction_prompt.txt", "r") as f:
         prompt = f.read()
     with open(raw_text_path, "r") as f:
         text = f.read()
@@ -67,7 +68,7 @@ def process_text(project_path):
         os.unlink(temp_file_path)
     
     # Notes
-    with open("prompts/text/notes_prompt.txt", "r") as f:
+    with open(os.path.join(f"prompts/{file_type}/notes_prompt.txt", "r") as f:
         prompt = f.read()
     input_data = prompt + "\n" + text
     
@@ -172,6 +173,7 @@ def upload(project_name):
             return jsonify({"error": f"Error reading text file: {str(e)}"})
     elif is_pdf_file(filename):
         try:
+            print(filepath)
             raw_text_path = os.path.join(project_path, "raw", "raw_text.txt")
             result_text = pdf_to_text(filename, raw_text_path)
             return jsonify({"result": result_text, "type": "text"})
