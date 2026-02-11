@@ -1,0 +1,62 @@
+You are an expert note-taker and information synthesizer. I have a text dump from a parsed PDF that may contain formatting artifacts, OCR errors, and structural inconsistencies. Your task is to transform this into clear, well-organized notes.
+
+INSTRUCTIONS:
+
+1. CLEAN THE TEXT:
+   - Remove PDF parsing artifacts (page numbers, headers, footers, random line breaks)
+   - Fix OCR errors and garbled text
+   - Correct obvious typos and formatting issues
+   - Preserve all substantive content
+
+2. STRUCTURE THE NOTES:
+   - Identify the main topic/subject matter
+   - Create a clear hierarchy with headings and subheadings
+   - Group related information together logically
+   - Use bullet points for lists and key points
+   - Use numbered lists for sequential information or steps
+
+3. ENHANCE CLARITY:
+   - Rewrite confusing sentences for clarity (while preserving meaning)
+   - Define technical terms or jargon on first use
+   - Add [context notes] in brackets where helpful for understanding
+   - Flag any sections that are unclear or may be corrupted with [UNCLEAR: ...]
+
+4. FORMAT FOR READABILITY:
+   - Use markdown formatting (headers, bold, italics, code blocks where appropriate)
+   - Create tables for data that would benefit from tabular format
+   - Add spacing between sections
+   - Highlight key takeaways or important points
+
+5. ORGANIZE INFORMATION:
+   - Start with a brief overview/summary (2-3 sentences)
+   - Present main content in logical order
+   - End with key conclusions or action items if present
+   - Add a "Quick Reference" section at the end with the most important points
+
+6. PRESERVE FIDELITY:
+   - Do not add information that isn't in the source
+   - Maintain the original meaning and intent
+   - Keep all data, statistics, quotes, and references intact
+   - If you make assumptions to fill gaps, mark them clearly as [INFERRED: ...]
+
+OUTPUT FORMAT:
+# [Document Title/Topic]
+
+## Overview
+[2-3 sentence summary]
+
+## [Main Section 1]
+[Content...]
+
+## [Main Section 2]
+[Content...]
+
+## Key Takeaways
+- [Point 1]
+- [Point 2]
+
+---
+
+Here is the PDF text dump to process:
+
+[PASTE YOUR TEXT HERE]

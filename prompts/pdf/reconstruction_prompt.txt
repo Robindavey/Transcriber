@@ -1,0 +1,96 @@
+You are an expert document restoration specialist. I have a text dump from a parsed PDF that has lost its original formatting, structure, and possibly some coherence. Your task is to reconstruct this into a polished, professional document that resembles the original intent.
+
+INSTRUCTIONS:
+
+1. FORENSIC ANALYSIS:
+   - Identify the document type (academic paper, report, guide, manual, article, etc.)
+   - Detect the original structure from textual clues (numbered sections, heading styles, etc.)
+   - Recognize different content types (body text, captions, tables, quotes, references)
+   - Identify the intended audience and formality level
+
+2. RESTORE STRUCTURE:
+   - Reconstruct logical document hierarchy (title, abstract/intro, sections, subsections)
+   - Reassemble fragmented paragraphs and sentences
+   - Reunite separated list items and bullet points
+   - Rebuild tables from linearized data
+   - Reattach captions to their figures/tables (mark as [Figure X: ...])
+
+3. FIX TECHNICAL ISSUES:
+   - Correct OCR errors (common mistakes: rn→m, l→1, O→0, etc.)
+   - Fix broken hyphenation and word splits
+   - Restore special characters and symbols
+   - Repair mangled equations or formulas (use LaTeX notation if needed)
+   - Reconstruct broken URLs and references
+
+4. PROFESSIONAL FORMATTING:
+   - Apply consistent heading hierarchy (# ## ### in markdown)
+   - Format citations and references properly
+   - Create proper tables using markdown or clear ASCII formatting
+   - Use appropriate text styling (bold for definitions, italics for emphasis)
+   - Add spacing for readability
+
+5. ENHANCE DOCUMENT QUALITY:
+   - Write a clear, descriptive title if missing
+   - Add section numbers if the document appears to use them
+   - Create a table of contents for longer documents (>2000 words)
+   - Ensure smooth transitions between sections
+   - Verify logical flow and coherence
+
+6. PRESERVE INTEGRITY:
+   - Maintain all original content and meaning
+   - Do not add substantive information not present in the source
+   - Mark any reconstructed elements as [RECONSTRUCTED: ...]
+   - Flag unclear or potentially corrupted sections as [VERIFICATION NEEDED: ...]
+   - Preserve all data, statistics, quotes, and technical information exactly
+
+7. METADATA EXTRACTION:
+   - Identify and format: title, author(s), date, institution/organization
+   - Extract keywords or tags if present
+   - Note document version or revision information if available
+
+OUTPUT FORMAT:
+
+[Use appropriate professional document format based on document type. Example below:]
+
+---
+
+# [Document Title]
+
+**Author(s):** [If identifiable]
+**Date:** [If identifiable]
+**[Other metadata]**
+
+## Table of Contents
+1. [Section 1]
+2. [Section 2]
+...
+
+---
+
+## Abstract / Executive Summary
+[If present]
+
+## 1. Introduction
+[Content...]
+
+## 2. [Main Section]
+[Content...]
+
+### 2.1 [Subsection]
+[Content...]
+
+## References
+[Properly formatted citations]
+
+---
+
+**RECONSTRUCTION NOTES:**
+- [Document type identified as: ...]
+- [Major reconstructions made: ...]
+- [Areas of uncertainty: ...]
+
+---
+
+Here is the PDF text dump to reconstruct:
+
+[PASTE YOUR TEXT HERE]

@@ -2,7 +2,7 @@
 import subprocess
 import os
 
-def text_to_speech(text_file_path, output_wav_path):
+def text_to_speech(text_file_path, output_wav_path, file_type="text"):
     """
     Convert text file to speech using Piper TTS
     
@@ -21,7 +21,7 @@ def text_to_speech(text_file_path, output_wav_path):
         # Extract project path: text_file_path is project/scripts/script.txt
         project_path = os.path.dirname(os.path.dirname(text_file_path))
         raw_text_path = os.path.join(project_path, "raw", "raw_text.txt")
-        prompt_path = "prompts/podcast-script.txt"
+        prompt_path = f"prompts/{file_type}/podcast-script.txt"
         
         with open(prompt_path, "r") as f:
             prompt = f.read()
@@ -36,12 +36,13 @@ def text_to_speech(text_file_path, output_wav_path):
         try:
             with open(text_file_path, "w") as output_file:
                 result = subprocess.run(["ollama", "run", "llama2:7b", "--keepalive", "0"], 
-                             stdin=open(temp_file_path, "r"), stdout=output_file)
+                            stdin=open(temp_file_path, "r"), stdout=output_file)
                 if result.returncode != 0:
                     print(f"Ollama failed with return code {result.returncode}")
                     return False
         finally:
             os.unlink(temp_file_path)
+        
     
     try:
         # Read the text file

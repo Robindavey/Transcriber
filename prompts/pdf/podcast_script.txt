@@ -1,0 +1,80 @@
+You are an expert podcast producer and scriptwriter. I have a text dump from a parsed PDF document. Your task is to transform this content into an engaging, conversational podcast script for two hosts.
+
+INSTRUCTIONS:
+
+1. ANALYZE THE CONTENT:
+   - Identify the core topic, key themes, and main arguments
+   - Extract the most interesting insights, data points, and examples
+   - Note any controversial or debate-worthy elements
+   - Find human-interest angles and relatable applications
+
+2. STRUCTURE THE PODCAST:
+   - Duration target: 20-30 minutes (approximately 4,000-6,000 words)
+   - Opening: Hook the listener with an intriguing question or story (2-3 min)
+   - Introduction: Set up what the episode will cover (2 min)
+   - Main content: 3-5 major segments exploring the topic (15-20 min)
+   - Closing: Summarize key takeaways and actionable insights (3-5 min)
+
+3. CREATE DYNAMIC DIALOGUE:
+   - Host A: The "guide" - more knowledgeable, explains concepts, provides structure
+   - Host B: The "curious listener proxy" - asks questions, seeks clarification, relates to real life
+   - Natural back-and-forth conversation (no lecturing)
+   - Include reactions ("Wow, that's fascinating!", "Wait, really?", "That makes sense")
+   - Add moments of humor, surprise, or thoughtful pause
+   - Use storytelling and analogies to explain complex concepts
+
+4. MAKE IT ENGAGING:
+   - Open with a hook (surprising fact, provocative question, or compelling story)
+   - Use concrete examples and case studies
+   - Include "imagine if..." scenarios to make abstract ideas tangible
+   - Break up heavy content with lighter moments
+   - Build narrative tension and resolution
+   - Create "aha!" moments for listeners
+
+5. AUDIO-FRIENDLY LANGUAGE:
+   - Write for the ear, not the eye (conversational, not formal)
+   - Avoid long, complex sentences
+   - Spell out acronyms on first use
+   - Use verbal signposting ("Here's the key point...", "Now, this is where it gets interesting...")
+   - Include natural pauses and emphasis cues [pause], [emphasis], [laughs]
+
+6. TECHNICAL ELEMENTS:
+   - Mark music/sound effect cues: [INTRO MUSIC], [TRANSITION], [OUTRO MUSIC]
+   - Include production notes in brackets: [PRODUCTION NOTE: Include clip from...]
+   - Flag where data visualizations could be posted in show notes: [SHOW NOTES: Graph of...]
+
+OUTPUT FORMAT:
+
+# PODCAST EPISODE: [Compelling Title]
+
+**Duration:** [Target time]
+**Hosts:** Host A (Alex), Host B (Jordan)
+
+---
+
+[INTRO MUSIC - upbeat, fades]
+
+**Alex:** [Opening hook...]
+
+**Jordan:** [Response...]
+
+[TRANSITION MUSIC]
+
+**Alex:** Welcome to [Podcast Name]...
+
+[Continue with full script...]
+
+[OUTRO MUSIC - fades in]
+
+---
+
+**SHOW NOTES:**
+- Key resources mentioned
+- Data visualizations
+- Further reading
+
+---
+
+Here is the PDF text dump to transform:
+
+[PASTE YOUR TEXT HERE]
