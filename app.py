@@ -47,8 +47,15 @@ def process_text(project_path):
     full_notes_path = os.path.join(project_path, "notes", "fullNotes.txt")
     short_notes_path = os.path.join(project_path, "notes", "ShortendNotes.txt")
     
+    # Read source type
+    source_type_path = os.path.join(project_path, "source_type.txt")
+    if os.path.exists(source_type_path):
+        with open(source_type_path, "r") as f:
+            file_type = f.read().strip()
+    else:
+        file_type = "txt"  # default
+    
     # Reconstruction
-    file_type = get_file_extension(raw_text_path)
     with open(f"prompts/{file_type}/reconstruction_prompt.txt", "r") as f:
         prompt = f.read()
     with open(raw_text_path, "r") as f:
@@ -68,7 +75,7 @@ def process_text(project_path):
         os.unlink(temp_file_path)
     
     # Notes
-    with open(os.path.join(f"prompts/{file_type}/notes_prompt.txt", "r") as f:
+    with open(f"prompts/{file_type}/notes_prompt.txt", "r") as f:
         prompt = f.read()
     input_data = prompt + "\n" + text
     
@@ -167,6 +174,9 @@ def upload(project_name):
                 text_content = f.read()
             with open(raw_text_path, "w") as f:
                 f.write(text_content)
+            # Store source type
+            with open(os.path.join(project_path, "source_type.txt"), "w") as f:
+                f.write("txt")
             result_text = text_content
             return jsonify({"result": result_text, "type": "text"})
         except Exception as e:
@@ -175,10 +185,13 @@ def upload(project_name):
         try:
             print(filepath)
             raw_text_path = os.path.join(project_path, "raw", "raw_text.txt")
-            result_text = pdf_to_text(filename, raw_text_path)
+            result_text = pdf_to_text(filepath, raw_text_path)
+            # Store source type
+            with open(os.path.join(project_path, "source_type.txt"), "w") as f:
+                f.write("pdf")
             return jsonify({"result": result_text, "type": "text"})
         except Exception as e:
-            return jsonify({"error": f"Error reading text file: {str(e)}"})
+            return jsonify({"error": f"Error reading PDF file: {str(e)}"})
     else:
         # Other file types - store in uploads but don't process
         return jsonify({"message": f"File '{filename}' uploaded successfully to project. Parsers for this file type will be available soon.", "type": "unsupported"})
@@ -196,15 +209,17 @@ def generate_tts(project_name):
     
     script_path = os.path.join(project_path, "scripts", "script.txt")
     output_path = os.path.join(project_path, "audio", "podcast_audio.wav")
-    file_type = get_file_extension(script_path)
-    # Check if script file exists
-    if not os.path.exists(script_path):
-        # Generate TTS
-        success = text_to_speech(script_path, output_path, file_type)
-        return jsonify({"error": "Script file not found"}), 404
     
-    # Generate TTS
-    success = True
+    # Read source type
+    source_type_path = os.path.join(project_path, "source_type.txt")
+    if os.path.exists(source_type_path):
+        with open(source_type_path, "r") as f:
+            file_type = f.read().strip()
+    else:
+        file_type = "txt"  # default
+    
+    # Generate TTS (which also generates script if needed)
+    success = text_to_speech(script_path, output_path, file_type)
     
     if success:
         return jsonify({"success": True, "message": "Audio generated successfully"})
